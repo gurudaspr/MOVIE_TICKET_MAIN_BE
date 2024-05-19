@@ -3,8 +3,11 @@ import cors from 'cors';
 import dotenv from 'dotenv'
 import cookieParser from 'cookie-parser';
 import connectToMongoDB from './config/db.js';
-import authRoutes from './routes/auth.routes.js';
+import userRoutes from './routes/user.routes.js';
+import ownerRoutes from './routes/owner.routes.js';
 import movieRoutes from './routes/movie.routes.js';
+
+
 
 
 
@@ -21,8 +24,9 @@ app.use(cookieParser());
 
 
 //routes
-app.use("/api/auth", authRoutes);
-app.use("/api/movie", movieRoutes);
+app.use("/api", userRoutes);
+app.use("/api", ownerRoutes);
+// app.use("/api/movie", movieRoutes);
 
 
 

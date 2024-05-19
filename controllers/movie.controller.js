@@ -20,6 +20,7 @@ export const AddMovie = async (req, res) => {
         if (!title || !duration || !genre || !releaseDate || !language ) {
             return res.status(400).json({ error: "All fields are required" });
         }
+        
         const newMovie = new Movie({
             title,
             duration,
@@ -56,3 +57,14 @@ export const MovieDetails = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+export  const selectMovie = async (req, res) => {
+    try {
+      const movies = await Movie.find().select('title');
+      res.status(200).json(movies);
+    } catch (error) {
+      console.error("Error fetching movies", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  }
+  
