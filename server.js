@@ -15,8 +15,7 @@ import movieRoutes from './routes/movie.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-app.use(cors({
-    
+app.use(cors({ origin: true, credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
@@ -26,7 +25,7 @@ app.use(cookieParser());
 //routes
 app.use("/api", userRoutes);
 app.use("/api", ownerRoutes);
-// app.use("/api/movie", movieRoutes);
+app.use("/api", movieRoutes);
 
 
 

@@ -13,9 +13,10 @@ const SeatSchema = new mongoose.Schema({
     }
 });
 const ShowSchema = new mongoose.Schema({
-    movieTitle: {
-        type: String,
-        required: true
+    movieId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Movie',
+        required: true,
     },
     theater: {
         type: mongoose.Schema.Types.ObjectId,

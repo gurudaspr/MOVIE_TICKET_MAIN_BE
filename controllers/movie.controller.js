@@ -14,7 +14,6 @@ export const AddMovie = async (req, res) => {
 
         const { title, duration, genre, releaseDate, language } = req.body;
         const result = await cloudinaryInstance.uploader.upload(req.file.path);
-        console.log(result);
         const imageUrl = result.url;
 
         if (!title || !duration || !genre || !releaseDate || !language ) {
@@ -39,6 +38,18 @@ export const AddMovie = async (req, res) => {
         console.log("Error in add movie controller", error.message);
         res.status(500).json({ error: "Internal Server Error" });
     }
+}
+
+export const Movies = async (req, res) => {
+    try {
+        const movies = await Movie.find();
+        res.status(200).json(movies);
+    }
+    catch (error) {
+        console.log("Error in movies controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+
 }
 
 

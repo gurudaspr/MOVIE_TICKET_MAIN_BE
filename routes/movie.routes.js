@@ -6,6 +6,6 @@ import upload from '../middlewares/upload.middleware.js';
 const router = express.Router();
 
 router.post('/add',upload.single("image"),AddMovie);
-router.get('/details/:id',MovieDetails);
+router.get('/movie-details/:id',MovieDetails);
 
 export default router;

@@ -1,14 +1,14 @@
 
-import Theatre from "../models/theatre.model.js";
+import Theater from "../models/theater.model.js";
 
 
-export const AddTheatre = async (req, res) => {
+export const AddTheater = async (req, res) => {
     try {
         const { name, location, ownerId,selectedSeats} = req.body;
         if (!name || !location || !ownerId || !selectedSeats) {
             return res.status(400).json({ error: "All fields are required" });
         }
-        const newTheatre = new Theatre({
+        const newTheatre = new Theater({
             name,
             location,
             owner : ownerId,
