@@ -15,8 +15,10 @@ import movieRoutes from './routes/movie.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-app.use(cors({ origin: true, credentials: true
-}));
+app.use(cors({
+    origin: 'https://movie-ticket-user-fe.vercel.app',
+    credentials: true // This allows cookies to be sent along with the request
+  }));
 app.use(express.json());
 app.use(cookieParser());
 
