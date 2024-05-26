@@ -5,17 +5,14 @@ dotenv.config();
 
 function authenticateUser(req, res, next) {
   const token = req.cookies.token;
-
   if (!token) return res.sendStatus(403);
 
-  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
     console.log('user-middle',err);
 
     if (err) return res.sendStatus(403);
 
     req.user = user;
-    // console.log(req.user.role);
-
     next();
   });
 }
