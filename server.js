@@ -5,7 +5,7 @@ import cookieParser from 'cookie-parser';
 import connectToMongoDB from './config/db.js';
 import userRoutes from './routes/user.routes.js';
 import ownerRoutes from './routes/owner.routes.js';
-import movieRoutes from './routes/movie.routes.js';
+import adminRoutes from './routes/admin.routes.js';
 
 
 
@@ -15,10 +15,8 @@ import movieRoutes from './routes/movie.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-app.use(cors({
-    origin: 'https://movie-ticket-user-fe.vercel.app',
-    credentials: true // This allows cookies to be sent along with the request
-  }));
+app.use(cors({ origin: true, credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 
@@ -27,7 +25,7 @@ app.use(cookieParser());
 //routes
 app.use("/api", userRoutes);
 app.use("/api", ownerRoutes);
-app.use("/api", movieRoutes);
+app.use("/api", adminRoutes);
 
 
 

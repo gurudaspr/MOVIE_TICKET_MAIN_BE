@@ -57,24 +57,21 @@ export const AddShows = async (req, res) => {
     }
 }
 
-export const GetShows = async (req, res) => {
-    // const {id} = req.params.id;
-    // console.log(id);
-    const showId = req.params.id;   
-    try {
-        const shows = await Show.findById(showId)
-        res.status(200).json(shows);
+// export const GetShows = async (req, res) => {
+//     const showId = req.params.id;   
+//     try {
+//         const shows = await Show.findById(showId)
+//         res.status(200).json(shows);
        
-    }
-    catch (error) {
-        console.log("Error in get shows controller", error.message);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-}
+//     }
+//     catch (error) {
+//         console.log("Error in get shows controller", error.message);
+//         res.status(500).json({ error: "Internal Server Error" });
+//     }
+// }
 
 export const GetShowsByDate = async (req, res) => {
     const { date, movieId } = req.query;
-    console.log(date, movieId);
     try {
         if (!date || !movieId) {
             return res.status(400).json({ error: 'Date is required' });

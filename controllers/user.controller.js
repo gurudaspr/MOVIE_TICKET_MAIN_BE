@@ -5,18 +5,18 @@ import { generateToken } from "../utils/generateToken.js";
 export const Signup = async (req, res) => {
     console.log('hitting signup controller');
 
-    try{
-        const {name, email, password, confirmPassword,} = req.body;
+    try {
+        const { name, email, password, confirmPassword, } = req.body;
 
-        if(!name || !email || !password){
-            return res.status(400).json({error: "All fields are required"});
+        if (!name || !email || !password) {
+            return res.status(400).json({ error: "All fields are required" });
         }
-        if(password !== confirmPassword){
-            return res.status(400).json({error: "Password and confirm password do not match"});
+        if (password !== confirmPassword) {
+            return res.status(400).json({ error: "Password and confirm password do not match" });
         }
-        const userExist = await User.findOne({email: email});
-        if(userExist){
-            return res.status(400).json({error: "User  already exists"});
+        const userExist = await User.findOne({ email: email });
+        if (userExist) {
+            return res.status(400).json({ error: "User  already exists" });
         }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
@@ -31,15 +31,15 @@ export const Signup = async (req, res) => {
         await newUser.save();
         if (!newUser) {
             return res.send("user is not created");
-          }
-          const token = generateToken(email);
-          res.cookie("token", token);
+        }
+        const token = generateToken(email);
+        res.cookie("token", token);
 
-        res.status(201).json({message: "User created successfully"});
+        res.status(201).json({ message: "User created successfully" });
     }
-    catch(error){
+    catch (error) {
         console.log("Error in signup controller", error.message);
-		res.status(500).json({ error: "Internal Server Error" });
+        res.status(500).json({ error: "Internal Server Error" });
     }
 }
 
@@ -48,19 +48,24 @@ export const Signin = async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email: email });
         if (!user) {
-          return res.status(400).json({ error: "Invalid credentials" });
+            return res.status(400).json({ error: "Invalid credentials" });
         }
         const isMatch = await bcrypt.compare(password, user.password);
         if (!isMatch) {
-          return res.status(400).json({ error: "Invalid credentials" });
+            return res.status(400).json({ error: "Invalid credentials" });
         }
         const token = generateToken(email);
         res.cookie("token", token);
         res.status(200).json({ message: "User signed in successfully" });
-        }
-        catch (error){
-            console.log("Error in signin controller", error.message);
-            res.status(500).json({ error: "Internal Server Error" });
-        }
     }
-    
+    catch (error) {
+        console.log("Error in signin controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
+
+
+export const Logout = async (req, res) => {
+    res.clearCookie('token');
+    res.status(200).json({ message: 'User logged out successfully' });
+}

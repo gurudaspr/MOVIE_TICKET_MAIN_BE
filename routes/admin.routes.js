@@ -1,11 +1,11 @@
 import express from 'express';
-import { AddMovie, MovieDetails} from '../controllers/movie.controller.js';
+import { AddMovie} from '../controllers/movie.controller.js';
 import upload from '../middlewares/upload.middleware.js';
 
 
 const router = express.Router();
 
 router.post('/add',upload.single("image"),AddMovie);
-router.get('/movie-details/:id',MovieDetails);
+
 
 export default router;
