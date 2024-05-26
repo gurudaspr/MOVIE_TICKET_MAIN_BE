@@ -15,7 +15,7 @@ import adminRoutes from './routes/admin.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-app.use(cors({ origin: true, credentials: true
+app.use(cors({ origin: 'http://localhost:5173', credentials: true
 }));
 app.use(express.json());
 app.use(cookieParser());
