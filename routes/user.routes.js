@@ -19,6 +19,7 @@ router.get('/show-seats/:showId',ShowSeats )
 
 
 router.get("/user/check-user",authenticateUser, async (req, res) => {
+
     const user = req.user;
 
     const findUser = await User.findOne({ email: user.data });
