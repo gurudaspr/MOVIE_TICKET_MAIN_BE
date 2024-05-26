@@ -11,9 +11,8 @@ import adminRoutes from './routes/admin.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-app.use(
-    cors({ credentials: true, origin: true, exposedHeaders: ["Set-Cookie"] })
-);
+app.use(cors({ origin: true, credentials: true
+}));
 app.use(express.json());
 app.use(cookieParser());
 
