@@ -12,7 +12,7 @@ dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
 app.use(cors({
-    origin: true,
+    origin:' https://movie-ticket-user-fe.vercel.app/',
     credentials: true,
   }));
 
