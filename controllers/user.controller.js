@@ -35,7 +35,7 @@ export const Signup = async (req, res) => {
         const token = generateToken(email);
         res.cookie("token", token, {
             maxAge: 15 * 24 * 60 * 60 * 1000,
-            // httpOnly: true,
+            httpOnly : false,
             sameSite: "none", 
             secure: process.env.NODE_ENV !== "development",
         });
@@ -62,7 +62,7 @@ export const Signin = async (req, res) => {
         const token = generateToken(email);
         res.cookie("token", token, {
             maxAge: 15 * 24 * 60 * 60 * 1000,
-            // httpOnly: true,
+            httpOnly: false,
             sameSite: "none", 
             secure: process.env.NODE_ENV !== "development",
         });
