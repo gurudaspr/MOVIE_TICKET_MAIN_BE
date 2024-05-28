@@ -19,6 +19,7 @@ const reviewSchema = new mongoose.Schema({
     },
     review: {
         type: String,
+        default : null,
     },
     date: {
         type: Date,

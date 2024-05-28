@@ -9,10 +9,6 @@ const movieSchema = new mongoose.Schema({
         type: Number,
         required: true,
     },
-    avgRating: {
-        type: Number,
-        default: 0,
-    },
     genre: {
         type: String,
         required: true,
