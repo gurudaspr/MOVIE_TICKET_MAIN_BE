@@ -116,7 +116,7 @@ export const ShowSeats = async (req, res) => {
       console.log('ShowId:', showId);
   
       const show = await Show.findById(showId);
-      console.log('Show:', show);
+    //   console.log('Show:', show);
   
       if (!show) {
         return res.status(404).json({ message: "Show not found" });

@@ -32,14 +32,6 @@ export const Signup = async (req, res) => {
         if (!newUser) {
             return res.send("user is not created");
         }
-        const token = generateToken(email);
-        res.cookie("token", token, {
-            maxAge: 15 * 24 * 60 * 60 * 1000,
-            httpOnly : false,
-            sameSite: "none", 
-            secure: process.env.NODE_ENV !== "development",
-        });
-
         res.status(201).json({ message: "User created successfully" }); 
     }
     catch (error) {
@@ -61,12 +53,12 @@ export const Signin = async (req, res) => {
         }
         const token = generateToken(email);
         res.cookie("token", token, {
-            maxAge: 15 * 24 * 60 * 60 * 1000,
-            httpOnly: false,
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
             sameSite: "none", 
             secure: process.env.NODE_ENV !== "development",
         });
-        res.status(200).json({ message: "User signed in successfully" });
+        res.status(200).json({ message: "User signed in successfully", userId: user._id });
     }
     catch (error) {
         console.log("Error in signin controller", error.message);
@@ -78,7 +70,7 @@ export const Signin = async (req, res) => {
 export const Logout = async (req, res) => {
 
     try {
-        res.clearCookie("token");
+        res.clearCookie("token",);
 
         res.status(200).json({ message: "User logged out successfully" });
     }
