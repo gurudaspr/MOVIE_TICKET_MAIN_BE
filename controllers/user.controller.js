@@ -80,12 +80,9 @@ export const Logout = async (req, res) => {
 }
 
 export const checkUser = async (req, res) => {
-    async (req, res) => {
-
         const user = req.user;
     
-        const findUser = await User.findOne({ email: user.data });
-      
+        const findUser = await User.findOne({ _id : user.data});
         if (!findUser) {
           return res.json({ message: "authentication failed", success: false });
         }
@@ -93,4 +90,3 @@ export const checkUser = async (req, res) => {
         res.json({ message: "authenticateUser", success: true });
     }    
 
-}
