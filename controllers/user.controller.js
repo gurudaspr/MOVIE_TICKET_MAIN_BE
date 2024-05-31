@@ -72,7 +72,7 @@ export const Logout = async (req, res) => {
         const token = req.cookies.token;
         console.log('token:', token);
 
-        res.cookie('token', '', {  maxAge: 0, httpOnly: true });
+        res.cookie('token', '', {  maxAge: 0, httpOnly: true, sameSite: "none",secure: process.env.NODE_ENV !== "development",});
         res.status(200).json({ message: 'Logged out successfully' });
     } catch (error) {
         console.error('Error logging out:', error);
