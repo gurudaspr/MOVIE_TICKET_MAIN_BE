@@ -69,15 +69,18 @@ export const Signin = async (req, res) => {
 export const Logout = async (req, res) => {
 
     try {
-        res.clearCookie("token",);
+        const token = req.cookies.token;
+        console.log('token:', token);
 
-        res.status(200).json({ message: "User logged out successfully" });
+        res.cookie('token', '', {  maxAge: 0, httpOnly: true });
+        res.status(200).json({ message: 'Logged out successfully' });
+    } catch (error) {
+        console.error('Error logging out:', error);
+
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-    catch (error) {
-        console.log("Error in logout controller", error.message);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-}
+};
+
 
 export const checkUser = async (req, res) => {
         const user = req.user;

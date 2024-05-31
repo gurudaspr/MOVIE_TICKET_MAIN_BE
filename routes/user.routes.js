@@ -9,7 +9,7 @@ const router = express.Router();
 
 router.post('/user/signup', Signup);
 router.post('/user/signin', Signin);
-router.get('/user/logout',Logout);
+router.post('/user/logout',Logout);
 router.get("/user/check-user",authenticateUser,checkUser)
 router.get('/movies',Movies)
 router.get('/movie-details/:id',MovieDetails);
