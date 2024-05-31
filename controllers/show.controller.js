@@ -1,61 +1,64 @@
 import Movie from "../models/movie.model.js";
 import Show from "../models/show.model.js";
 import Theater from "../models/theater.model.js";
-
+import  { format, parse, parseISO }  from 'date-fns';
 
 
 
 export const AddShows = async (req, res) => {
-
     try {
-        const { movieId, theaterId, showDate, showTime, price } = req.body;
+      const { movieId, theaterId, showDate, showTime, price } = req.body;
+  
+      if (!movieId || !theaterId || !showDate || !showTime || !price) {
+        return res.status(400).json({ message: "All fields are required" });
+      }
+  
+      console.log(showDate, showTime);
+  
+      const theater = await Theater.findById(theaterId);
+      if (!theater) {
+        return res.status(400).json({ message: "Invalid theater ID" });
+      }
+  
+      if (!theater.approved) {
+        return res.status(403).json({ message: "Theater is not approved" });
+      }
 
-        if (!movieId || !theaterId || !showDate || !showTime || !price) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-        console.log(showDate, showTime);
-        const theater = await Theater.findById(theaterId);
-        if (!theater) {
-            return res.status(400).json({ message: "Invalid theater ID" });
-        }
-        if (!theater.approved) {
-            return res.status(403).json({ message: "Theater is not approved" });
-        }
-        // if (theater.owner.toString() !== req.user.id) {
-        //     return res.status(403).json({ message: "You are not authorized to add shows to this theater" });
-        //   }
-        const combinedDateTimeString = `${showDate}T${showTime}:00.000Z`;
-        const combinedDateTime = new Date(combinedDateTimeString);
-        console.log(combinedDateTime);
-        if (isNaN(combinedDateTime)) {
-            return res.status(400).json({ message: "Invalid date or time format" });
-        }
-        const existingShow = await Show.findOne({
-            theater: theaterId,
-            showDate: combinedDateTime,
-            
-          });
-          if (existingShow) {
-            return res.status(400).json({ message: "A show already exists for the same date and time in this theater" });
-          }
-
-        const seatingPattern = theater.seatingPattern;
-        const showSeatingpattern = JSON.parse(JSON.stringify(seatingPattern));
-        const newShow = new Show({
-            movieId : movieId,
-            theater: theaterId,
-            showDate: combinedDateTime,
-            showSeating: showSeatingpattern,
-            price
-        });
-        const savedShow = await newShow.save();
-        res.status(201).json(savedShow);
+      const combinedDateTimeString = `${showDate} ${showTime}`;
+      const combinedDateTime = parse(combinedDateTimeString, "yyyy-MM-dd h:mm a", new Date());
+  
+      console.log(combinedDateTime);
+  
+      if (isNaN(combinedDateTime)) {
+        return res.status(400).json({ message: "Invalid date or time format" });
+      }
+  
+      const existingShow = await Show.findOne({
+        theater: theaterId,
+        showDate: combinedDateTime,
+      });
+  
+      if (existingShow) {
+        return res.status(400).json({ message: "A show already exists for the same date and time in this theater" });
+      }
+  
+      const seatingPattern = theater.seatingPattern;
+      const showSeatingpattern = JSON.parse(JSON.stringify(seatingPattern));
+      const newShow = new Show({
+        movieId: movieId,
+        theater: theaterId,
+        showDate: combinedDateTime,
+        showSeating: showSeatingpattern,
+        price
+      });
+  
+      const savedShow = await newShow.save();
+      res.status(201).json(savedShow);
+    } catch (error) {
+      console.log("Error in add show controller", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
     }
-    catch (error) {
-        console.log("Error in add show controller", error.message);
-        res.status(500).json({ error: "Internal Server Error" });
-    }
-}
+  };
 
 // export const GetShows = async (req, res) => {
 //     const showId = req.params.id;   
@@ -95,10 +98,9 @@ export const GetShowsByDate = async (req, res) => {
             const theaterLocation = show.theater.location;
             
             if (!acc[theaterName]) {
-                acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] }; // Include theater location
+                acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] }; 
             }
-            
-            const showTime = show.showDate.toISOString().slice(11, 16); // Extract HH:MM
+            const showTime = format(show.showDate, 'h:mm a');
             acc[theaterName].showTimes.push({ showTime, showId: show._id });
             return acc;
         }, {});

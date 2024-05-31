@@ -2,7 +2,7 @@ import crypto from "crypto";
 import razorpayInstance from "../config/razorpay.js";
 import Booking from '../models/booking.model.js';
 import Show from "../models/show.model.js";
-
+import { parseISO, format } from 'date-fns';
 
 
 export const createOrder = async (req, res) => {
@@ -75,8 +75,8 @@ export const verifyPayment = async (req, res) => {
 
 
 
-export  const  viewBookingbyUser = async (req, res) => { 
 
+export const viewBookingbyUser = async (req, res) => {
     try {
         const userId = req.user.data;
         const bookings = await Booking.find({ userId }).populate({
@@ -86,20 +86,34 @@ export  const  viewBookingbyUser = async (req, res) => {
             { path: 'theater', select: 'name' }
           ]
         });
-        
-        const bookingDetails = bookings.map(booking => ({
-          id: booking._id,
-          movieName: booking.showId.movieId.title,
-          theaterName: booking.showId.theater.name,
-          showDate: booking.showId.showDate,
-          seats: booking.seats,
-          price: booking.showId.price,
-          bookedSeats: booking.bookedSeats
-        }));
     
-        res.status(200).json(bookingDetails);
+        const bookingDetails = bookings.map(booking => {
+          try {
+            const showDate = new Date(booking.showId.showDate);
+            const formattedDate = format(showDate, "yyyy-MM-dd");
+            const formattedTime = format(showDate, "h:mm a");
+    
+            return {
+              id: booking._id,
+              movieName: booking.showId.movieId.title,
+              theaterName: booking.showId.theater.name,
+              showDate: formattedDate,
+              showTime: formattedTime,
+              seats: booking.seats,
+              price: booking.showId.price,
+              bookedSeats: booking.bookedSeats
+            };
+          } catch (error) {
+            console.error('Error processing booking:', error);
+            return null;
+          }
+        });
+    
+        res.status(200).json(bookingDetails.filter(Boolean)); // Filter out null entries
+        console.log(bookingDetails);
       } catch (error) {
         console.error('Error getting bookings:', error);
         res.status(500).send({ success: false, message: 'Internal server error' });
       }
     };
+
