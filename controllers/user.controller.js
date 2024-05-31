@@ -51,7 +51,7 @@ export const Signin = async (req, res) => {
         if (!isMatch) {
             return res.status(400).json({ error: "Invalid credentials" });
         }
-        const token = generateToken(email);
+        const token = generateToken(user);
         res.cookie("token", token, {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
@@ -66,7 +66,6 @@ export const Signin = async (req, res) => {
     }
 }
 
-
 export const Logout = async (req, res) => {
 
     try {
@@ -78,4 +77,20 @@ export const Logout = async (req, res) => {
         console.log("Error in logout controller", error.message);
         res.status(500).json({ error: "Internal Server Error" });
     }
+}
+
+export const checkUser = async (req, res) => {
+    async (req, res) => {
+
+        const user = req.user;
+    
+        const findUser = await User.findOne({ email: user.data });
+      
+        if (!findUser) {
+          return res.json({ message: "authentication failed", success: false });
+        }
+        
+        res.json({ message: "authenticateUser", success: true });
+    }    
+
 }
