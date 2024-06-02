@@ -7,6 +7,7 @@ import { parseISO, format } from 'date-fns';
 
 export const createOrder = async (req, res) => {
     const { amount } = req.body;
+    
     const options = {
         amount: amount * 100,
         currency: 'INR',
@@ -21,8 +22,6 @@ export const createOrder = async (req, res) => {
         res.status(500).send({ success: false, message: 'Internal server error' });
     }
 };
-
-
 export const verifyPayment = async (req, res) => {
     try {
         const { showId,  seats, totalPrice, paymentId, orderId } = req.body;
@@ -49,7 +48,7 @@ export const verifyPayment = async (req, res) => {
                 await callback(array[index], index, array);
             }
         }
-
+       console.log('book  ti at dadas');
         await asyncForEach(seats, async (selectedSeatName) => {
             show.showSeating.forEach(row => {
                 row.forEach(seat => {
@@ -60,8 +59,6 @@ export const verifyPayment = async (req, res) => {
                 });
             });
         });
-
-        // Save the updated show
         await show.save();
 
 
@@ -92,25 +89,22 @@ export const viewBookingbyUser = async (req, res) => {
             const showDate = new Date(booking.showId.showDate);
             const formattedDate = format(showDate, "yyyy-MM-dd");
             const formattedTime = format(showDate, "h:mm a");
-    
             return {
               id: booking._id,
+              movieId : booking.showId.movieId._id,
               movieName: booking.showId.movieId.title,
               theaterName: booking.showId.theater.name,
               showDate: formattedDate,
               showTime: formattedTime,
               seats: booking.seats,
               price: booking.showId.price,
-              bookedSeats: booking.bookedSeats
             };
           } catch (error) {
             console.error('Error processing booking:', error);
             return null;
           }
         });
-    
-        res.status(200).json(bookingDetails.filter(Boolean)); // Filter out null entries
-        console.log(bookingDetails);
+        res.status(200).json(bookingDetails.filter(Boolean));
       } catch (error) {
         console.error('Error getting bookings:', error);
         res.status(500).send({ success: false, message: 'Internal server error' });
