@@ -5,6 +5,7 @@ import { Movies,MovieDetails } from '../controllers/movie.controller.js';
 import authenticateUser from '../middlewares/user.middleware.js';
 import { createOrder, verifyPayment, viewBookingbyUser } from '../controllers/booking.controller.js';
 import checkSeatStatus from '../middlewares/check-seat.middleware.js';
+import { AddReview } from '../controllers/review.controller.js';
 
 const router = express.Router();
 
@@ -19,9 +20,8 @@ router.get('/show-seats/:showId',ShowSeats )
 
 router.post('/create-order',checkSeatStatus,createOrder);
 router.post('/verify-payment',authenticateUser,verifyPayment)
-
-
-router.get ('/view-booking',authenticateUser,viewBookingbyUser)
+router.get('/view-booking',authenticateUser,viewBookingbyUser)
+router.post('/add-review',authenticateUser,AddReview)
 
 
 export default router;
