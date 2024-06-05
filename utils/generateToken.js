@@ -6,12 +6,13 @@ dotenv.config();
 const secret_key = process.env.JWT_SECRET;
 
 export const generateToken = (user) => {
-  return jwt.sign({ data: user._id }, secret_key, { expiresIn: "1d" });
+  return jwt.sign({ data: user._id }, secret_key, { 
+    expiresIn: "1d" });
 };
 
 
-export const adminToken = (user) => {
-  return jwt.sign({ data: user.id, role: user.role }, secret_key, {
+export const adminToken = (owner) => {
+  return jwt.sign({ ownerId: owner.id, role: owner.role }, secret_key, {
     expiresIn: "1d",
   });
 };

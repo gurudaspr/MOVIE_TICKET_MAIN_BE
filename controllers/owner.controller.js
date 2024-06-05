@@ -31,9 +31,6 @@ export const Signup = async (req, res) => {
         if (!newOwner) {
             return res.send("owner is not created");
           }
-          const token = adminToken(newOwner);
-          res.cookie("token", token);
-
         res.status(201).json({message: "Owner created successfully"});
     }
     catch(error){
@@ -54,7 +51,12 @@ export const Signin = async (req, res) => {
           return res.status(400).json({ error: "Invalid credentials" });
         }
         const token = adminToken(owner);
-        res.cookie("token", token);
+        res.cookie("token", token, {
+            maxAge: 1 * 24 * 60 * 60 * 1000,
+            httpOnly: true,
+            sameSite: "none", 
+            secure: process.env.NODE_ENV !== "development", 
+        });
         res.status(200).json({ message: "Owner signed in successfully" });
         }
         catch (error){

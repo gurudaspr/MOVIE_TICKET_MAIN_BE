@@ -60,7 +60,13 @@ export const MovieDetails = async (req, res) => {
         if (!movie) {
             return res.status(400).json({ error: "Movie not found" });
         }
-        const movieDetails = await Movie.findById(id).populate('reviews');
+        const movieDetails = await Movie.findById(id).populate({
+            path: 'reviews',
+            populate: {
+                path: 'userId',
+                select: 'name'
+            }
+        });
         res.status(200).json(movieDetails);
     }
     catch (error) {
