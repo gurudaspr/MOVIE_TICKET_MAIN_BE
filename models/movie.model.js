@@ -13,6 +13,11 @@ const movieSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
+    description: {
+        type: String,
+        required: true,
+        max : 200,
+    },
     releaseDate: {
         type: Date,
         required: true,

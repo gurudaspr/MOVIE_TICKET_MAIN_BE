@@ -48,7 +48,6 @@ export const verifyPayment = async (req, res) => {
                 await callback(array[index], index, array);
             }
         }
-       console.log('book  ti at dadas');
         await asyncForEach(seats, async (selectedSeatName) => {
             show.showSeating.forEach(row => {
                 row.forEach(seat => {

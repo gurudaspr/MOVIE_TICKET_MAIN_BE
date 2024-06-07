@@ -1,11 +1,12 @@
 import express from 'express';
-import {Signup,Signin, Logout, checkUser} from '../controllers/user.controller.js';
+import {Signup,Signin, Logout, checkUser, getUser} from '../controllers/user.controller.js';
 import { GetShowsByDate, ShowSeats } from '../controllers/show.controller.js';
 import { Movies,MovieDetails } from '../controllers/movie.controller.js';
 import authenticateUser from '../middlewares/user.middleware.js';
 import { createOrder, verifyPayment, viewBookingbyUser } from '../controllers/booking.controller.js';
 import checkSeatStatus from '../middlewares/check-seat.middleware.js';
 import { AddReview } from '../controllers/review.controller.js';
+
 
 const router = express.Router();
 
@@ -22,6 +23,7 @@ router.post('/create-order',checkSeatStatus,createOrder);
 router.post('/verify-payment',authenticateUser,verifyPayment)
 router.get('/view-booking',authenticateUser,viewBookingbyUser)
 router.post('/add-review',authenticateUser,AddReview)
+router.get('/user',authenticateUser,getUser)
 
 
 export default router;

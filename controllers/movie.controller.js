@@ -12,11 +12,11 @@ export const AddMovie = async (req, res) => {
                 .json({ success: false, message: "No file uploaded" });
         }
 
-        const { title, duration, genre, releaseDate, language } = req.body;
+        const { title, duration, genre, releaseDate, language,description } = req.body;
         const result = await cloudinaryInstance.uploader.upload(req.file.path);
         const imageUrl = result.url;
 
-        if (!title || !duration || !genre || !releaseDate || !language ) {
+        if (!title || !duration || !genre || !releaseDate || !language || !description) {
             return res.status(400).json({ error: "All fields are required" });
         }
         
@@ -25,6 +25,7 @@ export const AddMovie = async (req, res) => {
             duration,
             genre,
             releaseDate,
+            description,
             language,
             image : imageUrl,
         });
