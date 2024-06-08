@@ -3,7 +3,7 @@ import Owner from '../models/owner.model.js';
 import { adminToken } from "../utils/generateToken.js";
 
 export const Signup = async (req, res) => {
-
+        console.log('signup');
     try{
         const {name, email, password, confirmPassword,} = req.body;
 
@@ -57,7 +57,7 @@ export const Signin = async (req, res) => {
             sameSite: "none", 
             secure: process.env.NODE_ENV !== "development", 
         });
-        res.status(200).json({ message: "Owner signed in successfully" });
+        res.status(200).json({ message: ' Logged in successfully', role: owner.role });
         }
         catch (error){
             console.log("Error in signin controller", error.message);
