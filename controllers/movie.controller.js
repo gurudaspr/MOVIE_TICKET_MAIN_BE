@@ -1,5 +1,4 @@
 import Movie from "../models/movie.model.js";
-import Review from "../models/review.model.js";
 import cloudinaryInstance from "cloudinary";
 
 
@@ -85,4 +84,20 @@ export  const selectMovie = async (req, res) => {
       res.status(500).json({ error: "Internal Server Error" });
     }
   }
+
+  export const deleteMovieById = async (req, res) => {
+    try {
+        const movie = await Movie.findById(req.params.id);
+        if (!movie) {
+            return res.status(404).json({ error: 'Movie not found' });
+        }
+        const publicId = movie.image.split('/').pop().split('.')[0];
+        await cloudinaryInstance.uploader.destroy(publicId); 
+        await Movie.deleteOne({ _id: req.params.id });
+        res.status(200).json({ message: 'Movie deleted successfully' });
+    } catch (error) {
+        console.error('Error in delete movie controller', error.message);
+        res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
   

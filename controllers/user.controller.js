@@ -1,6 +1,8 @@
 import bcrypt from "bcrypt";
 import User from '../models/user.model.js';
 import { generateToken } from "../utils/generateToken.js";
+import Review from "../models/review.model.js";
+import Booking from "../models/booking.model.js";
 
 export const Signup = async (req, res) => {
     console.log('hitting signup controller');
@@ -115,10 +117,19 @@ export const getUser = async (req, res) => {
 
   export const getAllUsers = async (req, res) => {
     try {
-      const users = await User.find();
-      res.json(users);
-    } catch (error) {
-      console.error('Error fetching users:', error);
-      res.status(500).json({ message: 'Internal server error' });
-    }
-  }
+        const users = await User.find();
+        const usersWithStats = await Promise.all(users.map(async user => {
+          const bookings = await Booking.find({ userId: user._id });
+          const reviews = await Review.find({ userId: user._id });
+          return {
+            ...user._doc,
+            totalBookings: bookings.length,
+            totalReviews: reviews.length
+          };
+        }));
+        res.json(usersWithStats);
+      } catch (error) {
+        console.error('Error fetching users with stats:', error);
+        res.status(500).json({ message: 'Internal server error' });
+      }
+    };
