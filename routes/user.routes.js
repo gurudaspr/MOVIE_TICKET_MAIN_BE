@@ -10,10 +10,10 @@ import { AddReview } from '../controllers/review.controller.js';
 
 const router = express.Router();
 
-router.post('/user/signup', Signup);
-router.post('/user/signin', Signin);
-router.post('/user/logout',Logout);
-router.get("/user/check-user",authenticateUser,checkUser)
+router.post('/signup', Signup);
+router.post('/signin', Signin);
+router.post('/logout',Logout);
+router.get("/check-user",authenticateUser,checkUser)
 router.get('/movies',Movies)
 router.get('/movie-details/:id',MovieDetails);
 router.get('/shows',GetShowsByDate);
@@ -23,7 +23,7 @@ router.post('/create-order',checkSeatStatus,createOrder);
 router.post('/verify-payment',authenticateUser,verifyPayment)
 router.get('/view-booking',authenticateUser,viewBookingbyUser)
 router.post('/add-review',authenticateUser,AddReview)
-router.get('/user',authenticateUser,getUser)
+router.get('/get-user',authenticateUser,getUser)
 
 
 export default router;

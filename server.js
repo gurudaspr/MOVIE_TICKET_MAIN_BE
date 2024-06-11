@@ -22,9 +22,9 @@ app.use(cookieParser());
 
 
 //routes
-app.use("/api", userRoutes);
-app.use("/api", ownerRoutes);
-app.use("/api", adminRoutes);
+app.use("/api/user", userRoutes);
+app.use("/api/owner", ownerRoutes);
+app.use("/api/admin", adminRoutes);
 
 
 
