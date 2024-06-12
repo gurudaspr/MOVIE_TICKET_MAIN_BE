@@ -54,9 +54,9 @@ export const approveTheater = async (req, res) => {
 }
   
 
-export const getAllTheaters = async (req, res) => {
+export const getApprovedTheaters = async (req, res) => {
     try {
-        const theaters = await Theater.find();
+        const theaters = await Theater.find({approved : true});
         res.status(200).json(theaters);
     }
     catch (error) {

@@ -19,7 +19,7 @@ router.get('/movie-details/:id',MovieDetails);
 router.get('/shows',GetShowsByDate);
 router.get('/show-seats/:showId',ShowSeats )
 
-router.post('/create-order',checkSeatStatus,createOrder);
+router.post('/create-order',authenticateUser,checkSeatStatus,createOrder);
 router.post('/verify-payment',authenticateUser,verifyPayment)
 router.get('/view-booking',authenticateUser,viewBookingbyUser)
 router.post('/add-review',authenticateUser,AddReview)
