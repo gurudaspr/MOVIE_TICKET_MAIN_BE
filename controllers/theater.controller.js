@@ -30,9 +30,8 @@ export const AddTheater = async (req, res) => {
 
 export const notApprovedTheaters = async (req, res) => { 
     try {
-        const theaters = await Theater.find({approved : false});
+        const theaters = await Theater.find({approved : false}).populate('owner', 'name');
         res.status(200).json(theaters);
-        console.log(theaters);
     }
     catch (error) {
         console.log("Error in theaters controller", error.message);
@@ -56,7 +55,7 @@ export const approveTheater = async (req, res) => {
 
 export const getApprovedTheaters = async (req, res) => {
     try {
-        const theaters = await Theater.find({approved : true});
+        const theaters = await Theater.find({ approved: true }).populate('owner', 'name');
         res.status(200).json(theaters);
     }
     catch (error) {
