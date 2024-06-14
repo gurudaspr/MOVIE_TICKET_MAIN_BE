@@ -4,6 +4,8 @@ import cloudinaryInstance from "cloudinary";
 
 
 export const AddMovie = async (req, res) => {
+    console.log(req.file, 'file');
+    console.log(req.body, 'body');
     try {
         if (!req.file) {
             return res
