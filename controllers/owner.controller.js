@@ -77,4 +77,41 @@ export const Signin = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+
+export const checkOwner = async (req, res) => {
+    const owner = req.owner;
+  try {
+    const ownerData = await Owner.findOne({ _id: owner.ownerId });
+    if (!ownerData) {
+      return res.status(404).json({ message: "owner not found", success: false });
+    }
+
+    if (ownerData.role !== "owner") {
+      return res.status(403).json({message: "authentication failed", success: false  });
+    }
+
+    res.status(200).json({ message: "authenticateOwner", success: true });
+  } catch (error) {
+    console.error("Error while checking owner status:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
+  }
+};
    
+
+export const checkAdmin = async (req, res) => { 
+    const owner = req.owner;
+  try {
+    const adminData = await Owner.findOne({ _id: owner.ownerId });
+    if (!adminData) {
+      return res.status(404).json({ message: "owner not found", success: false });
+    }
+
+    if (adminData.role !== "admin") {
+      return res.status(403).json({message: "authentication failed", success: false  });
+    }
+    res.status(200).json({ message: "authenticateAdmin", success: true });
+  } catch (error) {
+    console.error("Error while checking owner status:", error);
+    res.status(500).json({ message: "Internal Server Error", success: false });
+  }
+}

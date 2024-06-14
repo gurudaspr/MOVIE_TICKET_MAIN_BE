@@ -15,9 +15,9 @@ router.post('/signin', Signin);
 router.post('/logout',Logout);
 router.get("/check-user",authenticateUser,checkUser)
 router.get('/movies',Movies)
-router.get('/movie-details/:id',MovieDetails);
-router.get('/shows',GetShowsByDate);
-router.get('/show-seats/:showId',ShowSeats )
+router.get('/movie-details/:id',authenticateUser,MovieDetails);
+router.get('/shows',authenticateUser,GetShowsByDate);
+router.get('/show-seats/:showId',authenticateUser,ShowSeats )
 
 router.post('/create-order',authenticateUser,checkSeatStatus,createOrder);
 router.post('/verify-payment',authenticateUser,verifyPayment)

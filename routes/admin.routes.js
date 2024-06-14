@@ -4,6 +4,8 @@ import upload from '../middlewares/upload.middleware.js';
 import { getAllUsers } from '../controllers/user.controller.js';
 import { approveTheater, getApprovedTheaters, notApprovedTheaters } from '../controllers/theater.controller.js';
 import { Transactions } from '../controllers/transaction.controller.js';
+import { checkAdmin } from '../controllers/owner.controller.js';
+import authenticateAdmin from '../middlewares/admin.middleware.js';
 
 const router = express.Router();
 
@@ -15,7 +17,7 @@ router.get('/approved-theaters',getApprovedTheaters);
 router.get('/not-approved-theaters',notApprovedTheaters);
 router.put('/approve-theater/:id',approveTheater);
 
-
+router.get('/check-admin',authenticateAdmin,checkAdmin )
 router.get('/transactions',Transactions);
 
 export default router;
