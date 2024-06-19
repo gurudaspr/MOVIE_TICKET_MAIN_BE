@@ -26,4 +26,7 @@ router.post('/add-review',authenticateUser,AddReview)
 router.get('/get-user',authenticateUser,getUser)
 
 
+
+//additional stat routes
+
 export default router;

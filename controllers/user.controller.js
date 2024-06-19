@@ -133,3 +133,46 @@ export const getUser = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
       }
     };
+
+
+
+//additonal
+
+export const totalUsers = async (req, res) => {
+
+    try {
+        const users = await User.find();
+        res.status(200).json({ totalUsers: users.length });
+    } catch (error) {
+        console.error('Error fetching total users:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}
+
+
+
+export const newUsers = async (req, res) => { 
+  try {
+    const newRegistrations = await User.aggregate([
+      {
+        $group: {
+          _id: {
+            year: { $year: '$createdAt' },
+            month: { $month: '$createdAt' },
+          },
+          count: { $sum: 1 },
+        },
+      },
+      {
+        $sort: {
+          '_id.year': 1,
+          '_id.month': 1,
+        },
+      },
+    ]);
+
+    res.json(newRegistrations);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch new registrations' });
+  }
+};

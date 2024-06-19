@@ -43,6 +43,8 @@ export const AddShows = async (req, res) => {
       }
   
       const seatingPattern = theater.seatingPattern;
+
+      
       const showSeatingpattern = JSON.parse(JSON.stringify(seatingPattern));
       const newShow = new Show({
         movieId: movieId,

@@ -3,8 +3,9 @@ import Theater from "../models/theater.model.js";
 
 
 export const AddTheater = async (req, res) => {
+    const ownerId = req.owner.ownerId;
     try {
-        const { name, location, ownerId,selectedSeats} = req.body;
+        const { name, location,selectedSeats} = req.body;
         if (!name || !location || !ownerId || !selectedSeats) {
             return res.status(400).json({ error: "All fields are required" });
         }

@@ -10,9 +10,9 @@ const router = express.Router();
 router.post('/signup', Signup);
 router.post('/signin', Signin);
 router.post('/logout',Logout);
-router.post('/add-theater',AddTheater );
+router.post('/add-theater',authenticateOwner,AddTheater );
 router.post('/add-shows',AddShows)
-router.get('/select-movie',selectMovie)
+router.get('/select-movie',authenticateOwner,selectMovie)
 
 router.get('/check-owner',authenticateOwner,checkOwner)
 

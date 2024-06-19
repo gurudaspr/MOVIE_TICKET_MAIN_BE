@@ -12,8 +12,6 @@ function authenticateAdmin(req, res, next) {
     if (err) return res.sendStatus(403);
 
     req.owner = owner;
-
-    console.log(req.owner.role);
     
     if (req.owner.role !== "admin") {
       return res.send("not authenticated");

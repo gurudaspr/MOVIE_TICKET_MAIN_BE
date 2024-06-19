@@ -110,3 +110,16 @@ export const viewBookingbyUser = async (req, res) => {
       }
     };
 
+
+
+    //additional
+
+export const totalBookings = async (req, res) => {
+    try {
+        const bookings = await Booking.find();
+        res.status(200).json({ totalBookings: bookings.length });
+    } catch (error) {
+        console.error('Error fetching total bookings:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}    
