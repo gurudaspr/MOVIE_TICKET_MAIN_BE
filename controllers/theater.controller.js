@@ -65,3 +65,17 @@ export const getApprovedTheaters = async (req, res) => {
     }
 
 }
+
+
+
+export const totalTheaters = async (req, res) => {
+    try {
+        const approved = await Theater.find({ approved: true });
+        const pending = await Theater.find({ approved: false });
+
+        res.status(200).json({ approvedTheater: approved.length, pendingTheater: pending.length });
+    } catch (error) {
+        console.error('Error fetching total theaters:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+}

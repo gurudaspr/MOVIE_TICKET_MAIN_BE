@@ -134,3 +134,20 @@ export const ShowSeats = async (req, res) => {
     }
   };
 
+
+
+
+  //additional 
+
+
+  export const ShowStats = async (req, res) => {
+    try {
+        const shows = await Show.find();
+        const upComingShows = shows.filter(show => show.showDate > new Date());
+        res.status(200).json({ totalShows: shows.length, upComingShows: upComingShows.length});
+
+    } catch (error) {
+        console.error('Error fetching total shows:', error);
+        res.status(500).json({ message: 'Internal server error' });
+    }
+  }
