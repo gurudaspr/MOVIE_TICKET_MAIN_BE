@@ -1,7 +1,7 @@
 import Movie from "../models/movie.model.js";
 import Show from "../models/show.model.js";
 import Theater from "../models/theater.model.js";
-import  { addHours, format, parse, parseISO }  from 'date-fns';
+import  {  addMinutes, format, parse, parseISO }  from 'date-fns';
 
 
 
@@ -37,8 +37,8 @@ export const AddShows = async (req, res) => {
       const existingShows = await Show.find({
         theater: theaterId,
         showDate: {
-            $gte: addHours(combinedDateTime, -150),
-            $lte: addHours(combinedDateTime, 150),
+          $gte: addMinutes(combinedDateTime, -150),
+          $lte: addMinutes(combinedDateTime, 150),
         }
     });
 
