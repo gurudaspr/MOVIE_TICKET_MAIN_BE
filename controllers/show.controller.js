@@ -37,8 +37,8 @@ export const AddShows = async (req, res) => {
       const existingShows = await Show.find({
         theater: theaterId,
         showDate: {
-            $gte: addHours(combinedDateTime, -3), // 3 hours before the specified time
-            $lte: addHours(combinedDateTime, 3),  // 3 hours after the specified time
+            $gte: addHours(combinedDateTime, -150),
+            $lte: addHours(combinedDateTime, 150),
         }
     });
 
