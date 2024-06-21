@@ -79,3 +79,14 @@ export const totalTheaters = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
 }
+
+export const selectTheater = async (req, res) => { 
+    try {
+        const ownerId = req.owner.ownerId;
+        const theaters = await Theater.find( { owner : ownerId }).select('name').select('location');
+        res.status(200).json(theaters);
+    } catch (error) {
+        console.error("Error fetching theaters", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}

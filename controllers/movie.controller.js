@@ -54,7 +54,6 @@ export const Movies = async (req, res) => {
 
 }
 
-
 export const MovieDetails = async (req, res) => {
     const id = req.params.id;
     try {
@@ -79,7 +78,7 @@ export const MovieDetails = async (req, res) => {
 
 export  const selectMovie = async (req, res) => {
     try {
-      const movies = await Movie.find().select('title');
+      const movies = await Movie.find().select('title').select('releaseDate');
       res.status(200).json(movies);
     } catch (error) {
       console.error("Error fetching movies", error.message);
@@ -87,7 +86,7 @@ export  const selectMovie = async (req, res) => {
     }
   }
 
-  export const deleteMovieById = async (req, res) => {
+export const deleteMovieById = async (req, res) => {
     try {
         const movie = await Movie.findById(req.params.id);
         if (!movie) {
@@ -102,8 +101,6 @@ export  const selectMovie = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
-  
-
 
 export const  totalMovies = async (req, res) => {
 

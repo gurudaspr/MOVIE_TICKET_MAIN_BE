@@ -1,5 +1,5 @@
 import express from 'express';
-import { AddMovie, Movies, deleteMovieById, totalMovies} from '../controllers/movie.controller.js';
+import { AddMovie, Movies, deleteMovieById, selectMovie, totalMovies} from '../controllers/movie.controller.js';
 import upload from '../middlewares/upload.middleware.js';
 import {  totalUsers, getAllUsers, newUsers } from '../controllers/user.controller.js';
 import { approveTheater, getApprovedTheaters, notApprovedTheaters, totalTheaters } from '../controllers/theater.controller.js';
@@ -19,9 +19,9 @@ router.get('/all-users',getAllUsers);
 router.get('/approved-theaters',getApprovedTheaters);
 router.get('/not-approved-theaters',notApprovedTheaters);
 router.put('/approve-theater/:id',approveTheater);
-
 router.get('/check-admin',authenticateAdmin,checkAdmin )
 router.get('/transactions',Transactions);
+
 
 
 
