@@ -1,7 +1,7 @@
 import Movie from "../models/movie.model.js";
 import Show from "../models/show.model.js";
 import Theater from "../models/theater.model.js";
-import  { format, parse, parseISO }  from 'date-fns';
+import  { addHours, format, parse, parseISO }  from 'date-fns';
 
 
 
@@ -13,7 +13,6 @@ export const AddShows = async (req, res) => {
         return res.status(400).json({ message: "All fields are required" });
       }
   
-      console.log(showDate, showTime);
   
       const theater = await Theater.findById(theaterId);
       if (!theater) {
@@ -26,9 +25,6 @@ export const AddShows = async (req, res) => {
 
       const combinedDateTimeString = `${showDate} ${showTime}`;
       const combinedDateTime = parse(combinedDateTimeString, "yyyy-MM-dd h:mm a", new Date());
-  
-      console.log(combinedDateTime);
-  
       if (isNaN(combinedDateTime)) {
         return res.status(400).json({ message: "Invalid date or time format" });
       }
@@ -38,9 +34,17 @@ export const AddShows = async (req, res) => {
         showDate: combinedDateTime,
       });
   
-      if (existingShow) {
-        return res.status(400).json({ message: "A show already exists for the same date and time in this theater" });
-      }
+      const existingShows = await Show.find({
+        theater: theaterId,
+        showDate: {
+            $gte: addHours(combinedDateTime, -3), // 3 hours before the specified time
+            $lte: addHours(combinedDateTime, 3),  // 3 hours after the specified time
+        }
+    });
+
+    if (existingShows.length > 0) {
+        return res.status(400).json({ message: "Another show exists within 3 hours of the specified time" });
+    }
   
       const seatingPattern = theater.seatingPattern;
 
