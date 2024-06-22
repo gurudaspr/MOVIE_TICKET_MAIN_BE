@@ -11,15 +11,10 @@ import adminRoutes from './routes/admin.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-const corsOptions = {
-    origin: [
-        'https://movie-ticket-user-fe.vercel.app',
-        'https://movie-ticket-admin-owner-fe.vercel.app'
-    ],
-    credentials: true
-};
-
-app.use(cors(corsOptions));
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(cookieParser());
