@@ -59,6 +59,7 @@ export const Signin = async (req, res) => {
             httpOnly: true,
             sameSite: "strict", 
             secure: process.env.NODE_ENV !== "development",
+            domain : "vercel.app"
         });
         res.status(200).json({ message: "User signed in successfully", userId: user._id });
     }
