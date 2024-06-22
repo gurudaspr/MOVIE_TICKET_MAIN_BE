@@ -58,7 +58,7 @@ export const Signin = async (req, res) => {
             maxAge: 1 * 24 * 60 * 60 * 1000,
             httpOnly: true,
             sameSite: "lax", 
-            secure: process.env.NODE_ENV !== "development", 
+            // secure: process.env.NODE_ENV !== "development", 
             domain : "movie-ticket-user-fe.vercel.app"
         });
         res.status(200).json({ message: "User signed in successfully", userId: user._id });
