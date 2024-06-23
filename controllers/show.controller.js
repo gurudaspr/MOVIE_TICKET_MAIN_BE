@@ -124,7 +124,7 @@ export const ShowSeats = async (req, res) => {
       console.log('ShowId:', showId);
   
       const show = await Show.findById(showId);
-    //   console.log('Show:', show);
+  
   
       if (!show) {
         return res.status(404).json({ message: "Show not found" });
@@ -155,3 +155,35 @@ export const ShowSeats = async (req, res) => {
         res.status(500).json({ message: 'Internal server error' });
     }
   }
+
+
+
+  export const getShowByOwner = async (req, res) => {
+    const ownerId = req.owner.ownerId;
+    try {
+      const theaters = await Theater.find({ owner: ownerId });
+  
+      if (theaters.length === 0) {
+        return res.status(404).json({ message: "No theaters found for this owner" });
+      }
+      const theaterIds = theaters.map(theater => theater._id);
+      const shows = await Show.find({ theater: { $in: theaterIds } }).populate('movieId');
+  
+      const showDetails = shows.map(show => {
+        const theater = theaters.find(t => t._id.equals(show.theater));
+        return {
+          movieName: show.movieId.title,
+          movieImage: show.movieId.image,
+          showDate: show.showDate,
+          showTime: show.showTime, 
+          price: show.price,
+          theaterName: theater.name
+        };
+      });
+  
+      res.status(200).json(showDetails);
+    } catch (error) {
+      console.log("Error in get shows controller", error.message);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  };

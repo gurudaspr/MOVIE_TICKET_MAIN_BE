@@ -4,8 +4,6 @@ import cloudinaryInstance from "cloudinary";
 
 
 export const AddMovie = async (req, res) => {
-    console.log(req.file, 'file');
-    console.log(req.body, 'body');
     try {
         if (!req.file) {
             return res
@@ -34,7 +32,7 @@ export const AddMovie = async (req, res) => {
         if (!newMovie) {
             return res.send("Movie is not created");
         }
-        res.status(201).json({ message: "Movie created successfully" });
+        res.status(201).json({ message: "Movie created successfully", movie: newMovie});
     }
     catch (error) {
         console.log("Error in add movie controller", error.message);
