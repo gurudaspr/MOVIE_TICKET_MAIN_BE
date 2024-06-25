@@ -1,7 +1,8 @@
 import Movie from "../models/movie.model.js";
 import Show from "../models/show.model.js";
 import Theater from "../models/theater.model.js";
-import  {  addMinutes, format, parse, parseISO }  from 'date-fns';
+import  {  addMinutes, format, parse, parseISO, }  from 'date-fns';
+import { formatInTimeZone } from 'date-fns-tz';
 
 
 
@@ -79,44 +80,63 @@ export const AddShows = async (req, res) => {
 //     }
 // }
 
+
 export const GetShowsByDate = async (req, res) => {
-    const { date, movieId } = req.query;
-    try {
-        if (!date || !movieId) {
-            return res.status(400).json({ error: 'Date is required' });
-        }
-        const startDate = new Date(date);
-        const endDate = new Date(date);
-        endDate.setDate(endDate.getDate() + 1);
-        const query = {
-            showDate: {
-                $gte: startDate,
-                $lt: endDate
-            },
-            movieId: movieId
-        };
-        const shows = await Show.find(query)
-            .populate('theater')
-            .populate('movieId');
-        const groupedShows = shows.reduce((acc, show) => {
-            const theaterName = show.theater.name;
-            const movieName = show.movieId.title;
-            const theaterLocation = show.theater.location;
-            
-            if (!acc[theaterName]) {
-                acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] }; 
-            }
-            const showTime = format(show.showDate, 'h:mm a');
-            acc[theaterName].showTimes.push({ showTime, showId: show._id });
-            return acc;
-        }, {});
-        const formattedShows = Object.values(groupedShows);
-        res.status(200).json(formattedShows);
-    } catch (error) {
-        console.error('Error fetching shows:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}
+  const { date, movieId } = req.query;
+  try {
+      if (!date || !movieId) {
+          return res.status(400).json({ error: 'Date and movieId are required' });
+      }
+
+      const timeZone = 'Asia/Kolkata';
+      const startDate = parseISO(date);
+      const endDate = new Date(startDate);
+      endDate.setDate(endDate.getDate() + 1);
+
+      const query = {
+          showDate: {
+              $gte: startDate,
+              $lt: endDate
+          },
+          movieId: movieId
+      };
+
+      const shows = await Show.find(query)
+          .populate('theater')
+          .populate('movieId');
+
+      const currentTime = new Date();
+
+      const filteredShows = shows.filter(show => {
+          const showDate = new Date(show.showDate);
+          const showTimeInIST = formatInTimeZone(showDate, timeZone, 'yyyy-MM-dd HH:mm:ssXXX');
+          const currentTimeInIST = formatInTimeZone(currentTime, timeZone, 'yyyy-MM-dd HH:mm:ssXXX');
+
+          return startDate.toDateString() !== currentTime.toDateString() || showTimeInIST > currentTimeInIST;
+      });
+
+      const groupedShows = filteredShows.reduce((acc, show) => {
+          const theaterName = show.theater.name;
+          const movieName = show.movieId.title;
+          const theaterLocation = show.theater.location;
+
+          if (!acc[theaterName]) {
+              acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] };
+          }
+          const showTime = formatInTimeZone(new Date(show.showDate), timeZone, 'h:mm a');
+          acc[theaterName].showTimes.push({ showTime, showId: show._id });
+          return acc;
+      }, {});
+
+      const formattedShows = Object.values(groupedShows);
+      res.status(200).json(formattedShows);
+  } catch (error) {
+      console.error('Error fetching shows:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
 export const ShowSeats = async (req, res) => {
     console.log("Fetching seating pattern");
     try {
