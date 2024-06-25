@@ -81,7 +81,6 @@ export const AddShows = async (req, res) => {
 // }
 
 
-import { format, isAfter, startOfDay } from 'date-fns';
 
 export const GetShowsByDate = async (req, res) => {
   const { date, movieId } = req.query;
