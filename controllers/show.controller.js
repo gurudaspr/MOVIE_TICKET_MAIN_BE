@@ -80,45 +80,55 @@ export const AddShows = async (req, res) => {
 // }
 
 export const GetShowsByDate = async (req, res) => {
-    const { date, movieId } = req.query;
-    try {
-        if (!date || !movieId) {
-            return res.status(400).json({ error: 'Date is required' });
-        }
-        const startDate = new Date(date);
-        const endDate = new Date(date);
-        endDate.setDate(endDate.getDate() + 1);
-        const query = {
-            showDate: {
-                $gte: startDate,
-                $lt: endDate
-            },
-            movieId: movieId
-        };
-        const shows = await Show.find(query)
-            .populate('theater')
-            .populate('movieId');
-        const groupedShows = shows.reduce((acc, show) => {
-            const theaterName = show.theater.name;
-            const movieName = show.movieId.title;
-            const theaterLocation = show.theater.location;
-            if (startDate.toDateString() === now.toDateString() && showTime < now) {
+  const { date, movieId } = req.query;
+  try {
+      if (!date || !movieId) {
+          return res.status(400).json({ error: 'Date and Movie ID are required' });
+      }
+
+      const startDate = new Date(date);
+      const endDate = new Date(date);
+      endDate.setDate(endDate.getDate() + 1);
+
+      const query = {
+          showDate: {
+              $gte: startDate,
+              $lt: endDate
+          },
+          movieId: movieId
+      };
+
+      const shows = await Show.find(query)
+          .populate('theater')
+          .populate('movieId');
+
+      const now = new Date();
+
+      const groupedShows = shows.reduce((acc, show) => {
+          const theaterName = show.theater.name;
+          const movieName = show.movieId.title;
+          const theaterLocation = show.theater.location;
+          const showTime = new Date(show.showDate);
+
+          if (startDate.toDateString() === now.toDateString() && showTime < now) {
               return acc;
           }
-            if (!acc[theaterName]) {
-                acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] }; 
-            }
-            const showTime = format(show.showDate, 'h:mm a');
-            acc[theaterName].showTimes.push({ showTime, showId: show._id });
-            return acc;
-        }, {});
-        const formattedShows = Object.values(groupedShows);
-        res.status(200).json(formattedShows);
-    } catch (error) {
-        console.error('Error fetching shows:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-}
+
+          if (!acc[theaterName]) {
+              acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] };
+          }
+
+          acc[theaterName].showTimes.push({ showTime: format(showTime, 'h:mm a'), showId: show._id });
+          return acc;
+      }, {});
+
+      const formattedShows = Object.values(groupedShows);
+      res.status(200).json(formattedShows);
+  } catch (error) {
+      console.error('Error fetching shows:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
 export const ShowSeats = async (req, res) => {
     console.log("Fetching seating pattern");
     try {
