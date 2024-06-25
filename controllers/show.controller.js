@@ -102,7 +102,9 @@ export const GetShowsByDate = async (req, res) => {
             const theaterName = show.theater.name;
             const movieName = show.movieId.title;
             const theaterLocation = show.theater.location;
-            
+            if (startDate.toDateString() === now.toDateString() && showTime < now) {
+              return acc;
+          }
             if (!acc[theaterName]) {
                 acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] }; 
             }
