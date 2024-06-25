@@ -112,19 +112,15 @@ export const GetShowsByDate = async (req, res) => {
       const theaterLocation = show.theater.location;
       const showDateTime = show.showDate;
 
-      // Check if show is after the current time
-      const currentDateTime = new Date();
-      if (showDateTime > currentDateTime) {
-        if (!acc[theaterName]) {
-          acc[theaterName] = {
-            theater: theaterName,
-            theaterLocation: theaterLocation,
-            movieName: movieName,
-            showTimes: []
-          };
-        }
+      if (!acc[theaterName]) {
+        acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] };
+      }
 
-        const formattedShowTime = format(showDateTime, 'h:mm a');
+      const formattedShowTime = format(showDateTime, 'h:mm a');
+
+ 
+      const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+      if (isAfter(showDateTime, currentDateTime)) {
         acc[theaterName].showTimes.push({ showTime: formattedShowTime, showId: show._id });
       }
 
@@ -132,7 +128,6 @@ export const GetShowsByDate = async (req, res) => {
     }, {});
 
     const formattedShows = Object.values(groupedShows);
-
     res.status(200).json(formattedShows);
   } catch (error) {
     console.error('Error fetching shows:', error);
@@ -223,7 +218,7 @@ export const ShowSeats = async (req, res) => {
 
 
 
-   //export const GetShowsByDate = async (req, res) => {
+//    export const GetShowsByDate = async (req, res) => {
 //   const { date, movieId } = req.query;
 //   try {
 //     if (!date || !movieId) {
