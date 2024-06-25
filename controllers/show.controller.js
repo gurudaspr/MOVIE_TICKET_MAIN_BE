@@ -81,6 +81,8 @@ export const AddShows = async (req, res) => {
 // }
 
 
+import { format, isAfter, startOfDay } from 'date-fns';
+
 export const GetShowsByDate = async (req, res) => {
   const { date, movieId } = req.query;
   try {
@@ -116,9 +118,10 @@ export const GetShowsByDate = async (req, res) => {
       }
 
       const formattedShowTime = format(showDateTime, 'h:mm a');
-
  
       const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+
+      // Check if show is after current time in IST
       if (isAfter(showDateTime, currentDateTime)) {
         acc[theaterName].showTimes.push({ showTime: formattedShowTime, showId: show._id });
       }
@@ -126,13 +129,30 @@ export const GetShowsByDate = async (req, res) => {
       return acc;
     }, {});
 
+    // Convert groupedShows object to array
     const formattedShows = Object.values(groupedShows);
+
+    // Include theaters with no shows after current time
+    const theatersWithNoFutureShows = shows.filter(show => {
+      const showDateTime = show.showDate;
+      const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
+      return !isAfter(showDateTime, currentDateTime);
+    }).map(show => ({
+      theater: show.theater.name,
+      theaterLocation: show.theater.location,
+      movieName: show.movieId.title,
+      showTimes: []
+    }));
+
+    formattedShows.push(...theatersWithNoFutureShows);
+
     res.status(200).json(formattedShows);
   } catch (error) {
     console.error('Error fetching shows:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 export const ShowSeats = async (req, res) => {
