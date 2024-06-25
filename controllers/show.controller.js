@@ -119,7 +119,7 @@ export const GetShowsByDate = async (req, res) => {
 
  
       const currentDateTime = new Date().toLocaleString('en-US', { timeZone: 'Asia/Kolkata' });
-      if (isAfter(showDateTime, currentDateTimeIST)) {
+      if (isAfter(showDateTime, currentDateTime)) {
         acc[theaterName].showTimes.push({ showTime: formattedShowTime, showId: show._id });
       }
 
