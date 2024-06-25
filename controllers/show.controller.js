@@ -115,9 +115,11 @@ export const GetShowsByDate = async (req, res) => {
         acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] };
       }
 
+      const formattedShowTime = format(showDateTime, 'h:mm a');
+
       const currentDateTime = new Date();
-      if (isAfter(showDateTime, currentDateTime)) {
-        const formattedShowTime = format(showDateTime, 'h:mm a');
+      const currentDateTimeIST = utcToZonedTime(currentDateTime, 'Asia/Kolkata');
+      if (isAfter(showDateTime, currentDateTimeIST)) {
         acc[theaterName].showTimes.push({ showTime: formattedShowTime, showId: show._id });
       }
 
