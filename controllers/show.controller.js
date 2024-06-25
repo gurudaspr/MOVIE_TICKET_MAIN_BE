@@ -1,7 +1,8 @@
 import Movie from "../models/movie.model.js";
 import Show from "../models/show.model.js";
 import Theater from "../models/theater.model.js";
-import  {  addMinutes, format, parse, parseISO, isAfter }  from 'date-fns';
+import  {  addMinutes, format, parse, parseISO, isAfter,startOfDay }  from 'date-fns';
+
 
 
 
@@ -87,14 +88,15 @@ export const GetShowsByDate = async (req, res) => {
       return res.status(400).json({ error: 'Date and movieId are required' });
     }
 
-    const startDate = new Date(date);
-    const endDate = new Date(date);
-    endDate.setDate(endDate.getDate() + 1);
+    const selectedDate = new Date(date);
+    const startOfSelectedDate = startOfDay(selectedDate);
+    const endOfSelectedDate = new Date(startOfSelectedDate);
+    endOfSelectedDate.setDate(endOfSelectedDate.getDate() + 1);
 
     const query = {
       showDate: {
-        $gte: startDate,
-        $lt: endDate
+        $gte: startOfSelectedDate,
+        $lt: endOfSelectedDate
       },
       movieId: movieId
     };
@@ -107,17 +109,16 @@ export const GetShowsByDate = async (req, res) => {
       const theaterName = show.theater.name;
       const movieName = show.movieId.title;
       const theaterLocation = show.theater.location;
+      const showDateTime = show.showDate;
 
       if (!acc[theaterName]) {
-        acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] }; 
+        acc[theaterName] = { theater: theaterName, theaterLocation: theaterLocation, movieName: movieName, showTimes: [] };
       }
 
-      const showDateTime = parseISO(show.showDate.toISOString());
       const currentDateTime = new Date();
-
       if (isAfter(showDateTime, currentDateTime)) {
-        const showTime = format(showDateTime, 'h:mm a');
-        acc[theaterName].showTimes.push({ showTime, showId: show._id });
+        const formattedShowTime = format(showDateTime, 'h:mm a');
+        acc[theaterName].showTimes.push({ showTime: formattedShowTime, showId: show._id });
       }
 
       return acc;
