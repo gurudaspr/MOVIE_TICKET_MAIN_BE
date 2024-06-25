@@ -175,7 +175,6 @@ export const ShowSeats = async (req, res) => {
           movieName: show.movieId.title,
           movieImage: show.movieId.image,
           showDate: show.showDate,
-          showTime: show.showTime, 
           price: show.price,
           theaterName: theater.name
         };

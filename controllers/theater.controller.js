@@ -90,3 +90,18 @@ export const selectTheater = async (req, res) => {
         res.status(500).json({ error: "Internal Server Error" });
     }
 }
+
+export const TheaterByOwner = async (req, res) => {
+    const ownerId = req.owner.ownerId;
+    try {
+        const theaters = await Theater.find({ owner: ownerId });
+        if (theaters.length === 0) {
+            return res.status(404).json({ message: "No theaters found for this owner" });
+        }
+        res.status(200).json(theaters);
+        
+    } catch (error) {
+        console.log("Error in get theaters controller", error.message);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+}
