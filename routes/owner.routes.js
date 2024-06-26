@@ -2,8 +2,9 @@ import express from 'express';
 import {Signup,Signin, checkOwner, Logout} from '../controllers/owner.controller.js';
 import { AddTheater, TheaterByOwner, selectTheater } from '../controllers/theater.controller.js';
 import { AddShows, getShowByOwner } from '../controllers/show.controller.js';
-import { selectMovie } from '../controllers/movie.controller.js';
+import { Movies, selectMovie } from '../controllers/movie.controller.js';
 import authenticateOwner from '../middlewares/owner.middleware.js';
+import { TotalMovies, TotalSeatsSold, totalBookings, totalRevenue, totalShows } from '../controllers/stats.controller.js';
 
 const router = express.Router();
 
@@ -16,8 +17,17 @@ router.get('/select-movie',authenticateOwner,selectMovie)
 router.get('/select-theater',authenticateOwner,selectTheater)
 router.get('/check-owner',authenticateOwner,checkOwner)
 router.get('/get-shows',authenticateOwner,getShowByOwner)
-
+router.get('/all-movies',Movies);
 router.get('/my-theaters',authenticateOwner,TheaterByOwner)
+
+//stat routes
+
+router.get('/total-movies',authenticateOwner,TotalMovies)
+router.get('/total-shows',authenticateOwner,totalShows)
+router.get('/total-income',authenticateOwner,totalRevenue)
+router.get('/total-bookings',authenticateOwner,totalBookings)
+router.get('/total-tickets-sold',authenticateOwner,TotalSeatsSold)
+
 
 
 export default router;

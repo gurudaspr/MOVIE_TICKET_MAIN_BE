@@ -122,4 +122,7 @@ export const totalBookings = async (req, res) => {
         console.error('Error fetching total bookings:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
-}    
+} 
+
+
+
