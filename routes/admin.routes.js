@@ -12,15 +12,15 @@ import { ShowStats } from '../controllers/show.controller.js';
 
 const router = express.Router();
 
-router.post('/add-movie',upload.single("image"),AddMovie);
-router.delete('/delete-movie/:id', deleteMovieById);
-router.get('/all-movies',Movies);
-router.get('/all-users',getAllUsers);
-router.get('/approved-theaters',getApprovedTheaters);
-router.get('/not-approved-theaters',notApprovedTheaters);
-router.put('/approve-theater/:id',approveTheater);
+router.post('/add-movie',authenticateAdmin,upload.single("image"),AddMovie);
+router.delete('/delete-movie/:id',authenticateAdmin, deleteMovieById);
+router.get('/all-movies',authenticateAdmin,Movies);
+router.get('/all-users',authenticateAdmin,getAllUsers);
+router.get('/approved-theaters',authenticateAdmin,getApprovedTheaters);
+router.get('/not-approved-theaters',authenticateAdmin,notApprovedTheaters);
+router.put('/approve-theater/:id',authenticateAdmin,approveTheater);
 router.get('/check-admin',authenticateAdmin,checkAdmin )
-router.get('/transactions',Transactions);
+router.get('/transactions',authenticateAdmin,Transactions);
 
 
 
@@ -28,14 +28,14 @@ router.get('/transactions',Transactions);
 
 //additional stat routes
 
-router.get('/total-users',totalUsers);
-router.get('/total-bookings',totalBookings);
-router.get('/new-registrations',newUsers)
-router.get('/total-reviews',totalReviews)
-router.get('/total-theaters',totalTheaters);
-router.get('/total-shows',ShowStats)
-router.get('/total-movies',totalMovies)
-router.get('/total-transaction',TotalTransactions)
+router.get('/total-users',authenticateAdmin,totalUsers);
+router.get('/total-bookings',authenticateAdmin,totalBookings);
+router.get('/new-registrations',authenticateAdmin,newUsers)
+router.get('/total-reviews',authenticateAdmin,totalReviews)
+router.get('/total-theaters',authenticateAdmin,totalTheaters);
+router.get('/total-shows',authenticateAdmin,ShowStats)
+router.get('/total-movies',authenticateAdmin,totalMovies)
+router.get('/total-transaction',authenticateAdmin,TotalTransactions)
 
 
 export default router;

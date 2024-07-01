@@ -12,12 +12,12 @@ router.post('/signup', Signup);
 router.post('/signin', Signin);
 router.post('/logout',Logout);
 router.post('/add-theater',authenticateOwner,AddTheater );
-router.post('/add-shows',AddShows)
+router.post('/add-shows',authenticateOwner,AddShows)
 router.get('/select-movie',authenticateOwner,selectMovie)
 router.get('/select-theater',authenticateOwner,selectTheater)
 router.get('/check-owner',authenticateOwner,checkOwner)
 router.get('/get-shows',authenticateOwner,getShowByOwner)
-router.get('/all-movies',Movies);
+router.get('/all-movies',authenticateOwner,Movies);
 router.get('/my-theaters',authenticateOwner,TheaterByOwner)
 
 //stat routes
