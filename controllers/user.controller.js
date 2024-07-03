@@ -57,9 +57,10 @@ export const Signin = async (req, res) => {
         res.cookie("token", token, {
           maxAge: 1 * 24 * 60 * 60 * 1000,
           httpOnly: true,
-          sameSite: "lax",
+          sameSite: "none",
           secure: true,
-          domain: ".vercel.app"
+          partitioned: true,
+          path: "/"
         });
         res.status(200).json({ message: "User signed in successfully", userId: user._id });
     }
