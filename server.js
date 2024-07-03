@@ -16,11 +16,6 @@ app.use(cors({
     origin: ['https://filmgo.vercel.app', 'https://filmgo-ao.vercel.app'],
     credentials: true,
 }));
-app.use(cors({
-    origin: true,
-    credentials: true,
-}));
-
 app.use(express.json());
 app.use(cookieParser());
 
