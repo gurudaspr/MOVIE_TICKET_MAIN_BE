@@ -11,6 +11,11 @@ import adminRoutes from './routes/admin.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
+
+app.use(cors({
+    origin: ['https://filmgo.vercel.app', 'https://filmgo-ao.vercel.app'],
+    credentials: true,
+}));
 app.use(cors({
     origin: true,
     credentials: true,
