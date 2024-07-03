@@ -60,11 +60,6 @@ export const Signin = async (req, res) => {
           sameSite: "lax",
           secure: true,
           domain: ".vercel.app",
-          partitioned: true,
-          path: "/"
-          //setting headers
-          
-        
         });
         res.status(200).json({ message: "User signed in successfully", userId: user._id });
     }
