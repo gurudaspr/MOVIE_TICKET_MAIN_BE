@@ -11,28 +11,10 @@ import adminRoutes from './routes/admin.routes.js';
 dotenv.config();
 const PORT = process.env.PORT || 7895;
 const app = express();
-
-const allowedOrigins = ['https://filmgo.vercel.app', 'https://filmgo-ao.vercel.app'];
-
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  },
-  credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization']
-};
-
-app.use(cors(corsOptions));
-
-// app.use(cors({
-//     origin: true,
-//     credentials: true,
-// }));
+app.use(cors({
+    origin: true,
+    credentials: true,
+}));
 
 app.use(express.json());
 app.use(cookieParser());
@@ -54,5 +36,3 @@ app.listen(PORT,()=>{
     connectToMongoDB()
     console.log('Server is running at http://localhost:' + PORT);
 })
-
-export default app;
