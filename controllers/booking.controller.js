@@ -3,6 +3,7 @@ import razorpayInstance from "../config/razorpay.js";
 import Booking from '../models/booking.model.js';
 import Show from "../models/show.model.js";
 import { parseISO, format } from 'date-fns';
+import payment from "../models/payment.model.js";
 
 
 export const createOrder = async (req, res) => {
@@ -60,6 +61,15 @@ export const verifyPayment = async (req, res) => {
         });
         await show.save();
 
+        //payment
+        const paymentData  = new payment({
+            payment_id: paymentId,
+            user_id: userId,
+            amount: totalPrice,
+            status: 'success'
+        });
+        await paymentData.save();
+        //end payment
 
         res.status(200).send({ success: true, message: 'Booking successful', booking: newBooking });
 
