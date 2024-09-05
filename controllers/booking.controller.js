@@ -62,9 +62,9 @@ export const verifyPayment = async (req, res) => {
         await show.save();
 
         //payment
-        const paymentData  = new payment({
+        const paymentData = new payment({
             payment_id: paymentId,
-            userId : userId,
+            userId: userId,
             amount: totalPrice,
             status: 'success'
         });
