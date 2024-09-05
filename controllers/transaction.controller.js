@@ -49,7 +49,7 @@ dotenv.config();
 export const Transactions = async (req, res) => {
   try {
     const totalPayments = await payment.find()
-      .populate('user_id', 'name email')
+      .populate('userId', 'name email')
       .exec();
 
     res.status(200).json({ message: 'Transactions fetched successfully', totalPayments });
